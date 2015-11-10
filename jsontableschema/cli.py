@@ -72,16 +72,16 @@ def infer(data, row_limit, encoding, to_file):
 
 
 @main.command()
-@click.argument('schema')
-def validate(schema):
+@click.argument('schema_file', type=click.File('rb'))
+def validate(schema_file):
 
     """Validate that a supposed schema is in fact a JSON Table Schema."""
-
+    schema = json.load(schema_file)
     errors = [e.message for e in jsontableschema.validator.iter_errors(schema)]
     if not errors:
-        click.echo(False)
-    else:
         click.echo(True)
+    else:
+        click.echo(False)
         click.echo(errors)
 
 
